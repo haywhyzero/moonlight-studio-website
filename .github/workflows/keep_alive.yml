@@ -1,0 +1,26 @@
+name: Keep Render Service Awake
+
+on:
+  schedule:
+    # Runs every 14 minutes (Render free instances sleep after 15 minutes of inactivity)
+    - cron: "*/14 * * * *"
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render Service
+        env:
+          SERVICE_URL: ${{ secrets.RENDER_SERVICE_URL }}
+        run: |
+          # Fallback to healthz check
+          TARGET_URL="${SERVICE_URL:-https://your-service-name.onrender.com}/healthz"
+          echo "Pinging: $TARGET_URL"
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$TARGET_URL")
+          echo "HTTP response status: $RESPONSE"
+          if [ "$RESPONSE" -ge 200 ] && [ "$RESPONSE" -lt 400 ]; then
+            echo "Service is awake and responding!"
+          else
+            echo "Warning: Received unexpected status code $RESPONSE"
+          fi

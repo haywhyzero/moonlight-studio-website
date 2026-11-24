@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — Moonlight Studio{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="container narrow">
+    <div class="panel center">
+      <span class="eyebrow">Error {{ status_code }}</span>
+      <h1 class="mt-2">{{ title }}</h1>
+      <p class="lead">{{ message }}</p>
+      <div class="hero-actions justify-center">
+        <a class="btn btn-primary" href="/pricing">Back to pricing</a>
+        <a class="btn btn-secondary" href="/">Home</a>
+      </div>
+      <p class="faint small mt-2">
+        If a payment succeeded and you do not see a code, contact support with
+        your payment reference before trying again.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Activate — Moonlight Studio{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="container narrow">
+    <div class="panel">
+      <span class="eyebrow">Activation</span>
+      <h1 class="mt-2">Turn your code into studio time.</h1>
+      <p class="lead">
+        Your subscription code is printed on the checkout success page. Activate
+        it on each device your plan allows; the first activation starts the term
+        and all devices share one daily pool.
+      </p>
+
+      <div class="steps mt-2">
+        <article class="step">
+          <h3>Install the app</h3>
+          <p>
+            {% if download_url %}
+              <a href="/download/windows">Download the Windows setup</a> and run
+              the onboarding requirements check.
+            {% else %}
+              The Windows build is not published yet. Check back soon.
+            {% endif %}
+          </p>
+        </article>
+        <article class="step">
+          <h3>Paste your code</h3>
+          <p>Use the activation dialog at startup, or open Settings → Account and choose “Change code”.</p>
+        </article>
+        <article class="step">
+          <h3>Check your plan</h3>
+          <p>Settings → Account shows the plan, expiry, daily limit, and how much time is left today.</p>
+        </article>
+      </div>
+
+      <div class="notice info mt-3">
+        <strong>Moved to a new PC?</strong> A code allows the number of devices
+        shown on your plan. Open Settings → Account on the old machine and choose
+        “Remove this device” to free its slot, then activate the same code on the
+        new machine. Do not buy a second plan just to switch machines.
+      </div>
+
+      <h3 class="mt-3">Common activation errors</h3>
+      <div class="faq mt-2">
+        <details>
+          <summary>The app says the code was not found</summary>
+          <p>Check for missing characters. The code is 12 characters in four groups, and the ML- prefix is optional. Copy it from the success page rather than retyping.</p>
+        </details>
+        <details>
+          <summary>The code has reached its device limit</summary>
+          <p>This plan is already active on all its allowed devices. Remove an old device in Settings → Account or contact support; do not create a second order.</p>
+        </details>
+        <details>
+          <summary>The app cannot reach the activation server</summary>
+          <p>Check your connection and the server URL in Settings → Account → Advanced. Activation requires internet the first time; an already-activated device can keep working offline within the app's grace policy.</p>
+        </details>
+        <details>
+          <summary>I reached my daily limit</summary>
+          <p>The current session stops and the app shows the reset time. Limits reset at 00:00 UTC. You can still change settings and prepare your next session.</p>
+        </details>
+      </div>
+
+      <div class="hero-actions mt-3">
+        <a class="btn btn-primary" href="/pricing">Buy a plan</a>
+        {% if download_url %}
+          <a class="btn btn-secondary" href="/download/windows">Download for Windows</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}Moonlight Studio — Real-time AI avatar & voice studio{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow"><span class="status-dot"></span> Windows · local-first</span>
+      <h1>Your face. Your voice.<br><span class="gradient">Live on any call.</span></h1>
+      <p class="lead">
+        Moonlight Studio turns your webcam and microphone into a polished avatar
+        and a consistent voice — ready for Discord, Zoom, Meet, OBS, and any app
+        that accepts a camera or microphone.
+      </p>
+      <div class="hero-actions">
+        {% if download_url %}
+          <a class="btn btn-primary" href="/download/windows">Download for Windows</a>
+        {% else %}
+          <a class="btn btn-primary" href="/pricing">Choose a plan</a>
+        {% endif %}
+        <a class="btn btn-secondary" href="/pricing">See pricing</a>
+      </div>
+      <p class="hero-note">
+        Windows 10/11 · 64-bit · local processing by default · no card data ever
+        touches Moonlight Studio.
+      </p>
+    </div>
+    <div class="hero-art">
+      <img src="/static/branding/icon-nobg.png" alt="Moonlight Studio logo">
+      <div class="floating-badge">
+        <span><span class="status-dot"></span> Studio ready</span>
+        <span class="faint">Moonlight Camera · VB-CABLE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-head">
+      <h2>Built for live, not for exporting a clip.</h2>
+      <p>
+        Everything runs in the app you already use. Start the studio, pick your
+        camera and microphone, and the processed devices appear in your calling
+        app.
+      </p>
+    </div>
+    <div class="grid-3">
+      <article class="card">
+        <div class="card-icon">◐</div>
+        <h3>Avatar & face swap</h3>
+        <p>Local LivePortrait and ONNX face-swap engines, plus an optional cloud avatar path for machines without a GPU.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">◉</div>
+        <h3>Voice library</h3>
+        <p>Save reference recordings, use live DSP effects, or connect a Seed-VC worker on a CUDA/MPS machine.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">▣</div>
+        <h3>Real virtual devices</h3>
+        <p>Moonlight Studio Camera is a real DirectShow camera. VB-CABLE gives other apps a microphone they can select.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">⚡</div>
+        <h3>CPU-friendly starts</h3>
+        <p>Passthrough and live effects run without a GPU, so you can test the full pipeline before installing large models.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">⌁</div>
+        <h3>Honest health states</h3>
+        <p>A missing engine, cable, or model degrades one stage and tells you why. Video keeps running instead of failing silently.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon">☾</div>
+        <h3>Private by default</h3>
+        <p>Camera and microphone stay on your machine unless you explicitly turn on a cloud engine and confirm the upload.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>From download to live in three steps.</h2>
+    </div>
+    <div class="steps">
+      <article class="step">
+        <h3>Install the app</h3>
+        <p>Download the Windows setup, install the virtual camera, and let the onboarding check for FFmpeg, Python, and VB-CABLE.</p>
+      </article>
+      <article class="step">
+        <h3>Activate your plan</h3>
+        <p>Pay on this site with Paystack or Flutterwave. You get an activation code; enter it on each device your plan allows. The first activation starts the term.</p>
+      </article>
+      <article class="step">
+        <h3>Start the studio</h3>
+        <p>Select Moonlight Studio Camera and CABLE Output in your calling app. Press Start Studio and go live.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing-preview">
+  <div class="container">
+    <div class="section-head">
+      <h2>Simple plans. Daily limits, not surprise bills.</h2>
+      <p>Every plan includes the full app. The difference is studio hours per day, device count, output quality, and cloud minutes.</p>
+    </div>
+    <div class="price-grid">
+      {% for plan in plans %}
+      <article class="plan-card {% if plan.recommended %}recommended{% endif %}">
+        {% if plan.recommended %}<span class="plan-badge">Most popular</span>{% endif %}
+        <div class="plan-name">{{ plan.name }}</div>
+        <p class="plan-tagline">{{ plan.tagline }}</p>
+        <div class="price">
+          <strong>{{ price_ngn(plan.terms.monthly.priceKobo) }}</strong>
+          <span>/ month</span>
+        </div>
+        <div class="price-sub">or {{ price_ngn(plan.terms.yearly.priceKobo) }} billed yearly</div>
+        <div class="summary-row"><span>Daily studio time</span><strong>{{ plan.dailyHours }} hours</strong></div>
+        <div class="summary-row"><span>Devices</span><strong>{{ plan.maxDevices }}</strong></div>
+        <div class="summary-row"><span>Cloud minutes</span><strong>{{ plan.cloudMinutes }}</strong></div>
+        <a class="btn {% if plan.recommended %}btn-primary{% else %}btn-secondary{% endif %} btn-block mt-2" href="/pricing">Choose {{ plan.name }}</a>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container narrow">
+    <div class="section-head">
+      <h2>Questions people ask before buying.</h2>
+    </div>
+    <div class="faq">
+      <details open>
+        <summary>Do I need a GPU?</summary>
+        <p>Not for the app, live DSP effects, or passthrough. GPU-backed engines such as Seed-VC realtime and heavy avatar models need a supported NVIDIA CUDA or Apple MPS device; cloud engines are the alternative.</p>
+      </details>
+      <details>
+        <summary>What happens when I reach my daily hours?</summary>
+        <p>The current session stops cleanly and the app explains the reset time. You can keep browsing, change settings, and prepare the next session. The limit resets at 00:00 UTC.</p>
+      </details>
+      <details>
+        <summary>Can I use the app on more than one computer?</summary>
+        <p>Yes, up to the device count in your plan. All devices on one code share the same expiry and daily hours, and you can remove a device in Settings → Account to free its slot.</p>
+      </details>
+      <details>
+        <summary>Which payment methods work?</summary>
+        <p>Paystack and Flutterwave hosted checkout support cards, bank transfer, and USSD where available. We never see or store your card details.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container narrow panel center">
+    <h2>Ready to go live?</h2>
+    <p class="lead">Download the Windows app or pick a plan and activate in under a minute.</p>
+    <div class="hero-actions justify-center">
+      {% if download_url %}
+        <a class="btn btn-primary" href="/download/windows">Download for Windows</a>
+      {% endif %}
+      <a class="btn btn-secondary" href="/pricing">See plans</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — Moonlight Studio{% endblock %}
+{% block head %}
+  {% if not paid %}<meta http-equiv="refresh" content="5">{% endif %}
+{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="container narrow">
+    <div class="panel">
+      {% if paid %}
+        <span class="eyebrow">Payment confirmed</span>
+        <h1 class="mt-2">Your subscription code</h1>
+        <p class="lead">
+          Enter this code in Moonlight Studio. The first activation starts the
+          term; every device on the code shares the same expiry and daily hours.
+        </p>
+
+        <div class="code-box">
+          <span class="code" id="code-value">{{ code }}</span>
+          <button class="btn btn-secondary" type="button" data-copy="#code-value">
+            Copy code
+          </button>
+        </div>
+
+        <div class="notice">
+          Keep this code private. Anyone with it can activate the plan on up to
+          {{ plan.max_devices }}
+          device{% if plan.max_devices != 1 %}s{% endif %}. Daily hours are
+          shared by every device on the code, so a second machine does not add
+          a second allowance.
+        </div>
+
+        <div class="summary">
+          <div class="summary-row"><span>Plan</span><strong>{{ plan.name }}</strong></div>
+          <div class="summary-row"><span>Term</span><strong>{{ order.term.replace('_', ' ') }}</strong></div>
+          <div class="summary-row"><span>Paid</span><strong>{{ price_ngn(order.amount_kobo) }}</strong></div>
+          <div class="summary-row"><span>Daily limit</span><strong>{{ plan.daily_hours }} hours</strong></div>
+          <div class="summary-row"><span>Devices</span><strong>{{ plan.max_devices }}</strong></div>
+          <div class="summary-row"><span>Receipt email</span><strong>{{ order.email }}</strong></div>
+          <div class="summary-row"><span>Reference</span><strong class="faint">{{ order.reference }}</strong></div>
+        </div>
+
+        <h3 class="mt-3">Activate in the app</h3>
+        <div class="steps mt-2">
+          <article class="step">
+            <h3>Open Moonlight Studio</h3>
+            <p>The activation dialog appears after the requirements check.</p>
+          </article>
+          <article class="step">
+            <h3>Enter the code</h3>
+            <p>Paste all four groups. Hyphens and spaces are ignored.</p>
+          </article>
+          <article class="step">
+            <h3>Start creating</h3>
+            <p>Your plan, expiry, and remaining daily hours appear in Settings → Account.</p>
+          </article>
+        </div>
+      {% else %}
+        <span class="eyebrow">Confirming payment</span>
+        <h1 class="mt-2">We are waiting for the payment provider</h1>
+        <p class="lead">
+          This page refreshes automatically. If the payment succeeded, the code
+          will appear here in a few seconds.
+        </p>
+        <div class="summary">
+          <div class="summary-row"><span>Plan</span><strong>{{ plan.name }}</strong></div>
+          <div class="summary-row"><span>Reference</span><strong class="faint">{{ order.reference }}</strong></div>
+          <div class="summary-row"><span>Status</span><strong>Pending confirmation</strong></div>
+        </div>
+        <p class="muted small">
+          If this does not clear after a minute, keep this link and contact
+          support with the reference above. Do not pay twice.
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

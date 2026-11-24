@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Pricing — Moonlight Studio{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Plans</span>
+      <h1 class="mt-2">Pick the hours you actually use.</h1>
+      <p class="lead">
+        Every plan unlocks the full studio. Longer terms save more, and daily
+        limits keep costs predictable for you and for us.
+      </p>
+    </div>
+
+    {% if not payment_ready %}
+      <div class="notice danger">
+        <strong>Checkout is not configured yet.</strong> {{ payment_reason }}
+        Set the payment provider keys in the server environment before selling.
+      </div>
+    {% elif payment_provider == 'mock' %}
+      <div class="notice info">
+        <strong>Test mode.</strong> Payments are simulated locally. No money moves
+        and the generated code is safe to use for testing.
+      </div>
+    {% endif %}
+
+    <div class="billing-toggle" role="group" aria-label="Billing term">
+      <button type="button" class="active" data-term="monthly">Monthly</button>
+      <button type="button" data-term="six_months">
+        6 months <span class="save-pill">−15%</span>
+      </button>
+      <button type="button" data-term="yearly">
+        12 months <span class="save-pill">−25%</span>
+      </button>
+    </div>
+
+    <div class="price-grid">
+      {% for plan in plans %}
+      <article class="plan-card {% if plan.recommended %}recommended{% endif %}">
+        {% if plan.recommended %}<span class="plan-badge">Most popular</span>{% endif %}
+        <div class="plan-name">{{ plan.name }}</div>
+        <p class="plan-tagline">{{ plan.tagline }}</p>
+        <div class="price">
+          <strong
+            data-price-monthly="{{ plan.terms.monthly.priceKobo }}"
+            data-price-six_months="{{ plan.terms.six_months.priceKobo }}"
+            data-price-yearly="{{ plan.terms.yearly.priceKobo }}"
+          >{{ price_ngn(plan.terms.monthly.priceKobo) }}</strong>
+          <span data-period>/ month</span>
+        </div>
+        <div class="price-sub" data-price-sub>Billed monthly</div>
+        <ul class="plan-features">
+          {% for feature in plan.features %}
+            <li>{{ feature }}</li>
+          {% endfor %}
+          <li>{{ plan.maxWidth }}×{{ plan.maxHeight }} · up to {{ plan.maxFps }} fps</li>
+        </ul>
+        <form class="plan-form" method="post" action="/checkout">
+          <input type="hidden" name="plan_id" value="{{ plan.id }}">
+          <input type="hidden" name="term" value="monthly" data-term-input>
+          <input class="input" type="email" name="email" required
+                 autocomplete="email" placeholder="Email for your receipt">
+          <button class="btn {% if plan.recommended %}btn-primary{% else %}btn-secondary{% endif %} btn-block"
+                  type="submit" {% if not payment_ready %}disabled{% endif %}>
+            Continue to secure checkout
+          </button>
+        </form>
+        <p class="form-note">Code appears after payment. Activation starts the term.</p>
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="grid-3 mt-3">
+      <div class="card">
+        <h3>What counts as studio time?</h3>
+        <p>Only while the pipeline is running and processing. Browsing settings, editing profiles, and previewing a still image do not count.</p>
+      </div>
+      <div class="card">
+        <h3>What resets each day?</h3>
+        <p>Your daily hours reset at 00:00 UTC. Unused hours do not roll over, which is why the longer terms are discounted.</p>
+      </div>
+      <div class="card">
+        <h3>Can I change plans?</h3>
+        <p>Finish the current term, then activate a new code. We do not auto-charge or auto-renew — every purchase is explicit.</p>
+      </div>
+    </div>
+
+    <div class="panel mt-3">
+      <h2>How activation works</h2>
+      <div class="steps mt-2">
+        <article class="step">
+          <h3>Pay on this site</h3>
+          <p>Paystack or Flutterwave handles the card, transfer, or USSD payment. We never receive card details.</p>
+        </article>
+        <article class="step">
+          <h3>Copy your code</h3>
+          <p>The success page shows an activation code like <span class="faint">ML-XXXX-XXXX-XXXX</span>. Keep it private; it can activate your plan's full device count.</p>
+        </article>
+        <article class="step">
+          <h3>Enter it in the app</h3>
+          <p>Moonlight Studio binds the code to each device and starts the term on the first activation. Every device shares one daily pool.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

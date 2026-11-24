@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07070f">
+  <title>{% block title %}Moonlight Studio{% endblock %}</title>
+  <meta name="description" content="{% block description %}Real-time AI avatar and voice studio for Windows. Local-first, private, and built for live calls.{% endblock %}">
+  <link rel="icon" href="/static/branding/icon-nobg.png" type="image/png">
+  <link rel="stylesheet" href="/static/styles.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="/">
+        <img src="/static/branding/icon-nobg.png" alt="">
+        <span>Moonlight<small>STUDIO</small></span>
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="/#features" class="{% if current_path == '/' %}active{% endif %}">Features</a>
+        <a href="/pricing" class="{% if current_path == '/pricing' %}active{% endif %}">Pricing</a>
+        <a href="/activate" class="{% if current_path == '/activate' %}active{% endif %}">Activate</a>
+        {% if download_url %}
+          <a class="btn btn-primary" href="/download/windows">Download for Windows</a>
+        {% else %}
+          <a class="btn btn-secondary" href="/pricing">Get started</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>Moonlight Studio</strong><br>
+        Local-first AI avatar and voice studio for Windows.
+      </div>
+      <div class="footer-links">
+        <a href="/pricing">Pricing</a>
+        <a href="/activate">Activate</a>
+        <a href="mailto:support@moonlight.studio">Support</a>
+        <span>© {{ year }} Moonlight Studio</span>
+      </div>
+    </div>
+  </footer>
+  <script src="/static/site.js" defer></script>
+</body>
+</html>

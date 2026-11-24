@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Test payment — Moonlight Studio{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="container narrow">
+    <div class="panel">
+      <span class="eyebrow">Test mode</span>
+      <h1 class="mt-2">Simulate a successful payment</h1>
+      <p class="lead">
+        No money moves. Clicking the button below marks this order as paid and
+        generates the same kind of activation code a real payment would.
+      </p>
+      <div class="summary">
+        <div class="summary-row"><span>Plan</span><strong>{{ plan.name }}</strong></div>
+        <div class="summary-row"><span>Term</span><strong>{{ order.term.replace('_', ' ') }}</strong></div>
+        <div class="summary-row"><span>Amount</span><strong>{{ price_ngn(order.amount_kobo) }}</strong></div>
+        <div class="summary-row"><span>Email</span><strong>{{ order.email }}</strong></div>
+        <div class="summary-row"><span>Reference</span><strong class="faint">{{ reference }}</strong></div>
+      </div>
+      <form method="post" action="/mock/pay">
+        <input type="hidden" name="reference" value="{{ reference }}">
+        <input type="hidden" name="claim" value="{{ claim }}">
+        <button class="btn btn-primary btn-block" type="submit">
+          Complete test payment
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

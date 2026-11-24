@@ -1,0 +1,64 @@
+# Render Blueprint for Moonlight Studio Website & License Service
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: moonlight-studio-website
+    runtime: python
+    region: frankfurt # change to your preferred region (e.g. oregon, ohio, frankfurt, singapore)
+    plan: starter # Starter plan or higher recommended for persistent disk (SQLite)
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    
+    # Persistent storage for SQLite database (preserves orders, codes & usage across deploys)
+    disk:
+      name: moonlight-sqlite-data
+      mountPath: /var/data
+      sizeGB: 1
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+        
+      # Domain / URLs (Set to your custom Cloudflare domain or Render onrender.com domain)
+      - key: PUBLIC_BASE_URL
+        sync: false # Enter your public HTTPS URL in Render Dashboard (e.g., https://license.yourdomain.com)
+      - key: WEBSITE_URL
+        sync: false # Optional, defaults to PUBLIC_BASE_URL if omitted
+      - key: DOWNLOAD_URL
+        sync: false # Optional link to your Windows installer (leaves download button hidden if empty)
+
+      # Trust Cloudflare / Proxy Headers for accurate rate limiting and client IP detection
+      - key: TRUST_PROXY_HEADERS
+        value: "1"
+
+      # SQLite persistent file path pointing to the mounted persistent disk
+      - key: MOONLIGHT_DB_PATH
+        value: /var/data/moonlight.sqlite3
+
+      # Payment Provider Configuration (mock, paystack, or flutterwave)
+      - key: PAYMENT_PROVIDER
+        value: mock
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: PAYSTACK_CURRENCY
+        value: NGN
+      - key: FLUTTERWAVE_SECRET_KEY
+        sync: false
+      - key: FLUTTERWAVE_SECRET_HASH
+        sync: false
+      - key: FLUTTERWAVE_CURRENCY
+        value: NGN
+
+      # Cryptographic secrets: auto-generate a secure random secret on Render
+      - key: LICENSE_SECRET
+        generateValue: true
+
+      # Operational limits
+      - key: ACTIVATION_ATTEMPTS_PER_HOUR
+        value: "20"
+      - key: CHECKOUT_ATTEMPTS_PER_HOUR
+        value: "30"
+      - key: MAX_USAGE_DELTA_SECONDS
+        value: "300"
