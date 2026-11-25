@@ -181,7 +181,7 @@ HOW TO ACTIVATE:
 3. Your plan and features will unlock immediately.
 
 Download installer: {download_url}
-Support: support@moonlight.studio
+Support: moonlight-support@aerovyx.net
 """
 
 
