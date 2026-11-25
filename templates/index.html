@@ -1,168 +1,292 @@
 {% extends "base.html" %}
-{% block title %}Moonlight Studio — Real-time AI avatar & voice studio{% endblock %}
+{% block title %}Moonlight Studio — Real-time AI Avatar & Voice Studio for Windows{% endblock %}
+{% block description %}Transform your webcam and microphone into an AI avatar and sculpted voice in real time. Ultra-low latency, 100% private, and works natively with Discord, OBS, Zoom, and Meet.{% endblock %}
+
 {% block content %}
+<!-- Hero Section -->
 <section class="hero">
   <div class="container hero-grid">
     <div>
-      <span class="eyebrow"><span class="status-dot"></span> Windows · local-first</span>
-      <h1>Your face. Your voice.<br><span class="gradient">Live on any call.</span></h1>
+      <span class="eyebrow"><span class="status-dot"></span> Real-time AI Studio · Windows</span>
+      <h1>Your Face. Your Voice.<br><span class="gradient">Live on every call.</span></h1>
       <p class="lead">
-        Moonlight Studio turns your webcam and microphone into a polished avatar
-        and a consistent voice — ready for Discord, Zoom, Meet, OBS, and any app
-        that accepts a camera or microphone.
+        Drive expressive animated avatars directly from your webcam and reshape your voice with near-zero latency. Compatible with Discord, OBS Studio, Zoom, Google Meet, and any app that accepts a camera or microphone.
       </p>
+      
       <div class="hero-actions">
         {% if download_url %}
-          <a class="btn btn-primary" href="/download/windows">Download for Windows</a>
+          <a class="btn btn-primary" href="/download/windows">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -3px; margin-right: 6px;"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.95-1.801"/></svg>
+            Download for Windows
+          </a>
         {% else %}
-          <a class="btn btn-primary" href="/pricing">Choose a plan</a>
+          <a class="btn btn-primary" href="/pricing">Get Started</a>
         {% endif %}
-        <a class="btn btn-secondary" href="/pricing">See pricing</a>
+        <a class="btn btn-secondary" href="/pricing">View Plans & Pricing</a>
       </div>
+
       <p class="hero-note">
-        Windows 10/11 · 64-bit · local processing by default · no card data ever
-        touches Moonlight Studio.
+        Windows 10/11 · 64-bit · Local processing by default · DirectShow virtual camera & VB-CABLE output included.
       </p>
     </div>
-    <div class="hero-art">
-      <img src="/static/branding/icon-nobg.png" alt="Moonlight Studio logo">
-      <div class="floating-badge">
-        <span><span class="status-dot"></span> Studio ready</span>
-        <span class="faint">Moonlight Camera · VB-CABLE</span>
+
+    <!-- Studio UI Mockup Preview -->
+    <div class="studio-mockup">
+      <div class="window-header">
+        <div class="window-controls">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+        </div>
+        <div class="window-title">Moonlight Studio v1.0 — Live Session</div>
+        <div class="window-badge">
+          <span class="status-dot"></span> LIVE
+        </div>
+      </div>
+
+      <div class="mockup-viewport">
+        <!-- Top Status Tags -->
+        <div class="viewport-tag-top">
+          <span class="tag-pill cyan">30 FPS · 1080p</span>
+          <span class="tag-pill">DirectShow Driver Active</span>
+        </div>
+
+        <!-- Center Avatar Tracking Ring & Icon -->
+        <div class="avatar-preview-wrapper">
+          <div class="tracking-ring"></div>
+          <img src="/static/branding/icon-nobg.png" alt="Avatar Tracking Preview">
+        </div>
+
+        <!-- Bottom Audio & Device Deck -->
+        <div class="viewport-audio-bar">
+          <div class="audio-label">
+            <span style="color: var(--cyan);">🎙️</span>
+            <span>CABLE Output (Virtual Mic)</span>
+          </div>
+          <div class="eq-visualizer">
+            <div class="eq-col"></div>
+            <div class="eq-col"></div>
+            <div class="eq-col"></div>
+            <div class="eq-col"></div>
+            <div class="eq-col"></div>
+            <div class="eq-col"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Specs & Value Metrics -->
+  <div class="container">
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-val gradient">&lt; 50ms</div>
+        <div class="stat-desc">Ultra-Low Latency Pipeline</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">100% Private</div>
+        <div class="stat-desc">Zero Data Leaves Your PC</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">DirectShow</div>
+        <div class="stat-desc">Native Windows Virtual Camera</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">CPU or GPU</div>
+        <div class="stat-desc">Works Even Without Discrete GPUs</div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- Ecosystem & Platform Compatibility Strip -->
+<section class="eco-strip">
+  <div class="container">
+    <div class="eco-title">Works with every video, voice & streaming application</div>
+    <div class="eco-pills">
+      <span class="eco-pill">🎮 Discord</span>
+      <span class="eco-pill">🎥 OBS Studio</span>
+      <span class="eco-pill">📹 Zoom</span>
+      <span class="eco-pill">🌐 Google Meet</span>
+      <span class="eco-pill">🟣 Twitch</span>
+      <span class="eco-pill">💼 Microsoft Teams</span>
+      <span class="eco-pill">▶️ YouTube Live</span>
+      <span class="eco-pill">✈️ Telegram</span>
+    </div>
+  </div>
+</section>
+
+<!-- Bento Grid Features Section -->
 <section class="section" id="features">
   <div class="container">
     <div class="section-head">
-      <h2>Built for live, not for exporting a clip.</h2>
-      <p>
-        Everything runs in the app you already use. Start the studio, pick your
-        camera and microphone, and the processed devices appear in your calling
-        app.
+      <span class="eyebrow">Engineered for Performance</span>
+      <h2 class="mt-2">Built for live interaction, not pre-recorded exports.</h2>
+      <p class="lead">
+        Start Moonlight Studio, pick your avatar image and voice profile, and your transformed feeds appear as real hardware inputs inside your favorite software.
       </p>
     </div>
-    <div class="grid-3">
-      <article class="card">
-        <div class="card-icon">◐</div>
-        <h3>Avatar & face swap</h3>
-        <p>Local LivePortrait and ONNX face-swap engines, plus an optional cloud avatar path for machines without a GPU.</p>
+
+    <div class="bento-grid">
+      <!-- Wide Feature Card 1 -->
+      <article class="bento-card wide">
+        <div class="bento-icon">◐</div>
+        <h3>Real-Time LivePortrait & Face-Swap</h3>
+        <p>
+          High-precision facial landmark tracking translates your blinks, head turns, smiles, and micro-expressions directly to your avatar image frame-by-frame with smooth temporal consistency.
+        </p>
       </article>
-      <article class="card">
-        <div class="card-icon">◉</div>
-        <h3>Voice library</h3>
-        <p>Save reference recordings, use live DSP effects, or connect a Seed-VC worker on a CUDA/MPS machine.</p>
+
+      <!-- Feature Card 2 -->
+      <article class="bento-card">
+        <div class="bento-icon cyan">🎙️</div>
+        <h3>Live Voice Studio & DSP Shaping</h3>
+        <p>
+          Sculpt pitch, tone, formant, and resonance in real time. Connect local Seed-VC workers or use built-in DSP effects for crystal-clear microphone output.
+        </p>
       </article>
-      <article class="card">
-        <div class="card-icon">▣</div>
-        <h3>Real virtual devices</h3>
-        <p>Moonlight Studio Camera is a real DirectShow camera. VB-CABLE gives other apps a microphone they can select.</p>
+
+      <!-- Feature Card 3 -->
+      <article class="bento-card">
+        <div class="bento-icon green">▣</div>
+        <h3>Native DirectShow Virtual Camera</h3>
+        <p>
+          No awkward screen capture or window crop hacks. Moonlight Studio Camera installs directly as a native Windows video capture driver recognized by all browsers and apps.
+        </p>
       </article>
-      <article class="card">
-        <div class="card-icon">⚡</div>
-        <h3>CPU-friendly starts</h3>
-        <p>Passthrough and live effects run without a GPU, so you can test the full pipeline before installing large models.</p>
+
+      <!-- Wide Feature Card 4 -->
+      <article class="bento-card wide">
+        <div class="bento-icon">🔒</div>
+        <h3>Local-First & Complete Privacy</h3>
+        <p>
+          Your raw camera feed, voice audio, and activation keys stay strictly on your local computer. No cloud telemetry or recording servers ever touch your session.
+        </p>
       </article>
-      <article class="card">
-        <div class="card-icon">⌁</div>
-        <h3>Honest health states</h3>
-        <p>A missing engine, cable, or model degrades one stage and tells you why. Video keeps running instead of failing silently.</p>
-      </article>
-      <article class="card">
-        <div class="card-icon">☾</div>
-        <h3>Private by default</h3>
-        <p>Camera and microphone stay on your machine unless you explicitly turn on a cloud engine and confirm the upload.</p>
+
+      <!-- Feature Card 5 -->
+      <article class="bento-card">
+        <div class="bento-icon cyan">⚡</div>
+        <h3>Graceful Degradation</h3>
+        <p>
+          If an external GPU worker or audio cable drops, the engine intelligently falls back to keep your stream live instead of freezing or crashing your call.
+        </p>
       </article>
     </div>
   </div>
 </section>
 
+<!-- 3-Step Setup Workflow -->
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <h2>From download to live in three steps.</h2>
+      <span class="eyebrow">Quick Setup</span>
+      <h2 class="mt-2">From download to live stream in three minutes.</h2>
     </div>
+    
     <div class="steps">
       <article class="step">
-        <h3>Install the app</h3>
-        <p>Download the Windows setup, install the virtual camera, and let the onboarding check for FFmpeg, Python, and VB-CABLE.</p>
+        <div class="card-icon" style="color: var(--cyan); margin-bottom: 12px; font-weight: bold; font-size: 20px;">01</div>
+        <h3>Install Moonlight Studio</h3>
+        <p>Download the Windows installer. The setup automatically verifies your camera, microphone, and virtual device drivers.</p>
       </article>
       <article class="step">
-        <h3>Activate your plan</h3>
-        <p>Pay on this site with Paystack or Flutterwave. You get an activation code; enter it on each device your plan allows. The first activation starts the term.</p>
+        <div class="card-icon" style="color: var(--violet-strong); margin-bottom: 12px; font-weight: bold; font-size: 20px;">02</div>
+        <h3>Activate Your Plan</h3>
+        <p>Complete checkout via Paystack or Flutterwave. Enter your 12-character activation code to instantly unlock your devices and hours.</p>
       </article>
       <article class="step">
-        <h3>Start the studio</h3>
-        <p>Select Moonlight Studio Camera and CABLE Output in your calling app. Press Start Studio and go live.</p>
+        <div class="card-icon" style="color: var(--green); margin-bottom: 12px; font-weight: bold; font-size: 20px;">03</div>
+        <h3>Select Device & Go Live</h3>
+        <p>In Discord, Zoom, or OBS, select "Moonlight Studio Camera" and "CABLE Output". Press Start and you are live!</p>
       </article>
     </div>
   </div>
 </section>
 
+<!-- Pricing Preview Section -->
 <section class="section" id="pricing-preview">
   <div class="container">
     <div class="section-head">
-      <h2>Simple plans. Daily limits, not surprise bills.</h2>
-      <p>Every plan includes the full app. The difference is studio hours per day, device count, output quality, and cloud minutes.</p>
+      <span class="eyebrow">Clear & Fair Pricing</span>
+      <h2 class="mt-2">Simple plans. Daily studio limits, zero surprise bills.</h2>
+      <p class="lead">Every plan includes the full Windows desktop application, all local engines, and virtual drivers.</p>
     </div>
+
     <div class="price-grid">
       {% for plan in plans %}
       <article class="plan-card {% if plan.recommended %}recommended{% endif %}">
-        {% if plan.recommended %}<span class="plan-badge">Most popular</span>{% endif %}
+        {% if plan.recommended %}<span class="plan-badge">Most Popular</span>{% endif %}
         <div class="plan-name">{{ plan.name }}</div>
         <p class="plan-tagline">{{ plan.tagline }}</p>
+        
         <div class="price">
           <strong>{{ price_ngn(plan.terms.monthly.priceKobo) }}</strong>
           <span>/ month</span>
         </div>
-        <div class="price-sub">or {{ price_ngn(plan.terms.yearly.priceKobo) }} billed yearly</div>
-        <div class="summary-row"><span>Daily studio time</span><strong>{{ plan.dailyHours }} hours</strong></div>
-        <div class="summary-row"><span>Devices</span><strong>{{ plan.maxDevices }}</strong></div>
-        <div class="summary-row"><span>Cloud minutes</span><strong>{{ plan.cloudMinutes }}</strong></div>
-        <a class="btn {% if plan.recommended %}btn-primary{% else %}btn-secondary{% endif %} btn-block mt-2" href="/pricing">Choose {{ plan.name }}</a>
+        <div class="price-sub">or {{ price_ngn(plan.terms.yearly.priceKobo) }} billed annually (25% off)</div>
+
+        <div class="summary-row"><span>Daily studio time</span><strong>{{ plan.dailyHours }} hours / day</strong></div>
+        <div class="summary-row"><span>Allowed devices</span><strong>{{ plan.maxDevices }} device{% if plan.maxDevices != 1 %}s{% endif %}</strong></div>
+        <div class="summary-row"><span>Max resolution</span><strong>{{ plan.maxWidth }}x{{ plan.maxHeight }} @ {{ plan.maxFps }}fps</strong></div>
+        <div class="summary-row"><span>Cloud GPU minutes</span><strong>{{ plan.cloudMinutes }} min / mo</strong></div>
+
+        <a class="btn {% if plan.recommended %}btn-primary{% else %}btn-secondary{% endif %} btn-block mt-3" href="/pricing">
+          Get Started with {{ plan.name }}
+        </a>
       </article>
       {% endfor %}
     </div>
   </div>
 </section>
 
+<!-- Frequently Asked Questions -->
 <section class="section">
   <div class="container narrow">
     <div class="section-head">
-      <h2>Questions people ask before buying.</h2>
+      <span class="eyebrow">Got Questions?</span>
+      <h2 class="mt-2">Frequently Asked Questions</h2>
     </div>
+
     <div class="faq">
       <details open>
-        <summary>Do I need a GPU?</summary>
-        <p>Not for the app, live DSP effects, or passthrough. GPU-backed engines such as Seed-VC realtime and heavy avatar models need a supported NVIDIA CUDA or Apple MPS device; cloud engines are the alternative.</p>
+        <summary>Do I need a dedicated GPU to run Moonlight Studio?</summary>
+        <p>No! The desktop app, real-time DSP voice effects, and basic passthrough run comfortably on standard CPUs. For advanced deep learning avatar models (LivePortrait) and neural voice synthesis (Seed-VC), an NVIDIA CUDA GPU is recommended, or you can utilize cloud GPU minutes included in higher plans.</p>
       </details>
+
       <details>
-        <summary>What happens when I reach my daily hours?</summary>
-        <p>The current session stops cleanly and the app explains the reset time. You can keep browsing, change settings, and prepare the next session. The limit resets at 00:00 UTC.</p>
+        <summary>How does the daily studio allowance work?</summary>
+        <p>Your daily studio allowance (e.g., 2, 4, or 8 hours) measures active live camera/voice transformation time. When your time runs out, the engine stops gracefully, and the limit resets every night at 00:00 UTC. The app itself remains fully open so you can configure profiles and test audio.</p>
       </details>
+
       <details>
-        <summary>Can I use the app on more than one computer?</summary>
-        <p>Yes, up to the device count in your plan. All devices on one code share the same expiry and daily hours, and you can remove a device in Settings → Account to free its slot.</p>
+        <summary>Can I use one code across multiple PCs?</summary>
+        <p>Yes! Depending on your plan (e.g. Creator allows 2 devices, Studio allows 4), you can activate the same code on multiple computers. All active devices share the same pooled daily allowance, and you can easily deactivate an old PC from Settings to free up its slot.</p>
       </details>
+
       <details>
-        <summary>Which payment methods work?</summary>
-        <p>Paystack and Flutterwave hosted checkout support cards, bank transfer, and USSD where available. We never see or store your card details.</p>
+        <summary>Which payment methods are accepted?</summary>
+        <p>We support secure hosted checkouts powered by Paystack and Flutterwave, accepting cards, bank transfers, and USSD. Your card credentials never touch Moonlight Studio servers.</p>
+      </details>
+
+      <details>
+        <summary>How do I receive my activation code?</summary>
+        <p>As soon as payment completes, your unique 12-character code is displayed on screen with a one-click copy button, and a full receipt copy is immediately dispatched to your email address via Resend.</p>
       </details>
     </div>
   </div>
 </section>
 
+<!-- Final Call-To-Action Banner -->
 <section class="section">
   <div class="container narrow panel center">
-    <h2>Ready to go live?</h2>
-    <p class="lead">Download the Windows app or pick a plan and activate in under a minute.</p>
+    <h2>Ready to transform your live stream?</h2>
+    <p class="lead">Download the Windows studio app or choose your subscription plan to get your code instantly.</p>
     <div class="hero-actions justify-center">
       {% if download_url %}
         <a class="btn btn-primary" href="/download/windows">Download for Windows</a>
       {% endif %}
-      <a class="btn btn-secondary" href="/pricing">See plans</a>
+      <a class="btn btn-secondary" href="/pricing">Explore Plans & Pricing</a>
     </div>
   </div>
 </section>

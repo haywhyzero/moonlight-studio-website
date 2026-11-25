@@ -68,6 +68,8 @@ service loads `.env` from the working directory at startup.
 | `MAX_USAGE_DELTA_SECONDS` | `300` | Largest usage increment accepted from, or charged for, one heartbeat. |
 | `TRUST_PROXY_HEADERS` | `0` | Read `X-Forwarded-For` / `CF-Connecting-IP`. Enable only behind a proxy that overwrites them. |
 | `ALLOW_MOCK_PAYMENTS` | `0` | Permit mock payments on an HTTPS origin. Staging only. |
+| `RESEND_API_KEY` | empty | Resend API key for emailing receipts & codes to buyers. |
+| `RESEND_FROM_EMAIL` | `Moonlight Studio <billing@moonlight.studio>` | Sender name & verified email for Resend receipts. |
 
 Generate a production secret once:
 

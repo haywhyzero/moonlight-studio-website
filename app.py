@@ -293,6 +293,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             except LicenseError:
                 pass
         paid = order["status"] == "paid"
+        if paid:
+            service.send_receipt_if_needed(order)
         code = service.code_for_order(order) if paid else ""
         return templates.TemplateResponse(
             "success.html",

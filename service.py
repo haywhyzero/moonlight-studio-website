@@ -30,6 +30,7 @@ try:
         utcnow,
         verify_entitlement,
     )
+    from .email_service import send_receipt_email
 except (ImportError, ValueError):
     from config import Settings
     from db import Database
@@ -49,6 +50,7 @@ except (ImportError, ValueError):
         utcnow,
         verify_entitlement,
     )
+    from email_service import send_receipt_email
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
@@ -284,7 +286,37 @@ class LicenseService:
             connection.commit()
         order["status"] = "paid"
         self._ensure_code(order)
+        self.send_receipt_if_needed(order)
         return order
+
+    def send_receipt_if_needed(self, order: dict[str, Any]) -> bool:
+        """Send receipt email to buyer via Resend once paid, idempotently."""
+        if self.settings.is_mock_payments:
+            return False
+        if not self.settings.resend_api_key:
+            return False
+        if order.get("status") != "paid":
+            return False
+
+        with self.db.connect() as connection:
+            cur = connection.execute(
+                "UPDATE orders SET receipt_sent_at = ? WHERE id = ? AND receipt_sent_at IS NULL",
+                (iso(utcnow()), order["id"]),
+            )
+            connection.commit()
+            should_send = cur.rowcount > 0
+
+        if not should_send:
+            return False
+
+        code = self.code_for_order(order)
+        plan = get_plan(order["plan_id"])
+        return send_receipt_email(
+            order=order,
+            plan=plan,
+            code=code,
+            settings=self.settings,
+        )
 
     def record_webhook(
         self, *, event_id: str, provider: str, payload: bytes

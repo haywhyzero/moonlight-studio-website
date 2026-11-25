@@ -51,6 +51,10 @@ class Settings:
     flutterwave_secret_hash: str = ""
     flutterwave_currency: str = "NGN"
 
+    # Resend email receipt configuration (production only).
+    resend_api_key: str = ""
+    resend_from_email: str = "Moonlight Studio <billing@moonlight.studio>"
+
     # Used to sign entitlement tokens and to derive redemption codes. Change
     # this once, before the first paid order, and keep it stable.
     license_secret: str = DEFAULT_LICENSE_SECRET
@@ -144,6 +148,10 @@ class Settings:
             flutterwave_secret_key=_env("FLUTTERWAVE_SECRET_KEY"),
             flutterwave_secret_hash=_env("FLUTTERWAVE_SECRET_HASH"),
             flutterwave_currency=_env("FLUTTERWAVE_CURRENCY", "NGN"),
+            resend_api_key=_env("RESEND_API_KEY"),
+            resend_from_email=_env(
+                "RESEND_FROM_EMAIL", "Moonlight Studio <billing@moonlight.studio>"
+            ),
             license_secret=_env("LICENSE_SECRET", DEFAULT_LICENSE_SECRET),
             code_pepper=_env("CODE_PEPPER"),
             activation_attempts_per_hour=_env_int(

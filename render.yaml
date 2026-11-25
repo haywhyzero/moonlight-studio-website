@@ -51,6 +51,12 @@ services:
       - key: FLUTTERWAVE_CURRENCY
         value: NGN
 
+      # Email Receipts via Resend (set in Render Dashboard)
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        value: Moonlight Studio <billing@moonlight.studio>
+
       # Cryptographic secrets: auto-generate a secure random secret on Render
       - key: LICENSE_SECRET
         generateValue: true

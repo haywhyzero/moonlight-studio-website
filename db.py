@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS orders (
     status TEXT NOT NULL DEFAULT 'pending',
     claim_hash TEXT NOT NULL UNIQUE,
     created_at TEXT NOT NULL,
-    paid_at TEXT
+    paid_at TEXT,
+    receipt_sent_at TEXT
 );
 
 CREATE TABLE IF NOT EXISTS subscription_codes (
@@ -121,12 +122,19 @@ class Database:
             connection.executescript(SCHEMA)
             self._migrate_device_limit(connection)
             self._migrate_usage_heartbeat(connection)
+            self._migrate_receipt_sent_at(connection)
             # Re-create tables/indexes after a migration rebuilt them.
             connection.executescript(SCHEMA)
             connection.commit()
             connection.execute("PRAGMA journal_mode = WAL")
 
     # ------------------------------------------------------------------ migrate
+    def _migrate_receipt_sent_at(self, connection: sqlite3.Connection) -> None:
+        """Add receipt_sent_at column to orders for idempotent email delivery."""
+        if "receipt_sent_at" in _columns(connection, "orders"):
+            return
+        connection.execute("ALTER TABLE orders ADD COLUMN receipt_sent_at TEXT")
+
     def _migrate_usage_heartbeat(self, connection: sqlite3.Connection) -> None:
         """Add the server-side heartbeat timestamp to existing installs.
 
