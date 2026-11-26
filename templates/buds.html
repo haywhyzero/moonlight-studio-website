@@ -1,0 +1,97 @@
+﻿{% extends "base.html" %}
+{% block title %}Passes — Moonlight Studio{% endblock %}
+{% block head %}
+{# Tell every crawler to ignore this page. The HTTP X-Robots-Tag header is also set server-side. #}
+<meta name="robots" content="noindex, nofollow, nosnippet, noarchive">
+{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">One-Time Passes</span>
+      <h1 class="mt-2">Grab a pass, go live.</h1>
+      <p class="lead">
+        Each pass gives a fixed block of studio time — no subscription, no renewal.
+        Once your hours are used up the pass is fully exhausted.
+      </p>
+    </div>
+
+    {% if not payment_ready %}
+      <div class="notice danger">
+        <strong>Checkout is not configured yet.</strong> {{ payment_reason }}
+        Set the payment provider keys in the server environment before selling.
+      </div>
+    {% elif payment_provider == 'mock' %}
+      <div class="notice info">
+        <strong>Test mode.</strong> Payments are simulated locally. No money moves
+        and the generated code is safe to use for testing.
+      </div>
+    {% endif %}
+
+    <div class="price-grid buds-grid">
+      {% for plan in buds_plans %}
+      <article class="plan-card {% if plan.recommended %}recommended{% endif %}">
+        {% if plan.recommended %}<span class="plan-badge">Best value</span>{% endif %}
+        <div class="plan-name">{{ plan.name }}</div>
+        <p class="plan-tagline">{{ plan.tagline }}</p>
+        <div class="price">
+          <strong>{{ price_ngn(plan.monthlyPriceKobo) }}</strong>
+          <span>one-time</span>
+        </div>
+        <div class="price-sub buds-price-sub">Single pass &middot; 1 device &middot; no renewal</div>
+        <ul class="plan-features">
+          {% for feature in plan.features %}
+            <li>{{ feature }}</li>
+          {% endfor %}
+          <li>{{ plan.maxWidth }}&times;{{ plan.maxHeight }} &middot; up to {{ plan.maxFps }} fps</li>
+        </ul>
+        <form class="plan-form" method="post" action="/checkout">
+          <input type="hidden" name="plan_id" value="{{ plan.id }}">
+          <input type="hidden" name="term" value="single_use">
+          <input class="input" type="email" name="email" required
+                 autocomplete="email" placeholder="Email for your receipt">
+          <button class="btn {% if plan.recommended %}btn-primary{% else %}btn-secondary{% endif %} btn-block"
+                  type="submit" {% if not payment_ready %}disabled{% endif %}>
+            Get this pass
+          </button>
+        </form>
+        <p class="form-note">Code delivered after payment. Activation locks it to one device.</p>
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="panel mt-3">
+      <h2>How passes work</h2>
+      <div class="steps mt-2">
+        <article class="step">
+          <h3>Pay once</h3>
+          <p>Paystack or Flutterwave handles the transaction. You receive a unique activation code immediately after payment.</p>
+        </article>
+        <article class="step">
+          <h3>Activate on your device</h3>
+          <p>Enter the code in Moonlight Studio. It binds permanently to that one device on first use.</p>
+        </article>
+        <article class="step">
+          <h3>Use your hours</h3>
+          <p>Your lifetime limit counts down whenever the studio pipeline is running. When hours reach zero the pass is fully exhausted — no resets, no renewals.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="grid-3 mt-3">
+      <div class="card">
+        <h3>Can I transfer to another device?</h3>
+        <p>No. A pass binds to the first device that activates it and cannot be moved. Choose the machine you plan to stream from.</p>
+      </div>
+      <div class="card">
+        <h3>What counts as studio time?</h3>
+        <p>Only while the AI pipeline is actively running. Idle preview, settings editing, or paused sessions do not consume your hours.</p>
+      </div>
+      <div class="card">
+        <h3>Do hours expire?</h3>
+        <p>Yes — passes expire 30 days after first activation regardless of how many hours remain, so activate when you are ready to use them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

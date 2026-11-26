@@ -165,6 +165,42 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def activate_page(request: Request):
         return templates.TemplateResponse("activate.html", context(request))
 
+    @app.get("/buds", response_class=HTMLResponse)
+    async def buds_page(request: Request):
+        # Return 404 to avoid leaking that this path exists.
+        # Access requires the shared secret token in a cookie or query param.
+        provided = (
+            request.query_params.get("token")
+            or request.cookies.get("buds_token")
+        )
+        token = settings.buds_access_token
+        if not token or provided != token:
+            raise LicenseError(
+                "Page not found.",
+                status_code=404,
+                code="not_found",
+            )
+        buds_plans = service.plan_payloads(include_single_use=True)
+        buds_plans = [p for p in buds_plans if p["isSingleUse"]]
+        response = templates.TemplateResponse(
+            "buds.html",
+            context(request, buds_plans=buds_plans),
+        )
+        # Persist access token in a cookie so the user doesn't need ?token=
+        # on every navigation (30-day sliding window).
+        response.set_cookie(
+            "buds_token",
+            token,
+            max_age=60 * 60 * 24 * 30,
+            httponly=True,
+            samesite="lax",
+            secure=settings.is_production,
+        )
+        # Belt-and-suspenders: also set the HTTP header (Cloudflare respects it).
+        response.headers["X-Robots-Tag"] = "noindex, nofollow, nosnippet, noarchive"
+        return response
+
+
     @app.get("/download/windows")
     async def download_windows():
         if not settings.download_url:

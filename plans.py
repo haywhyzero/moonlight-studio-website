@@ -13,6 +13,7 @@ TERMS: dict[str, dict[str, object]] = {
     "monthly": {"months": 1, "discount_percent": 0, "label": "Monthly"},
     "six_months": {"months": 6, "discount_percent": 15, "label": "6 months"},
     "yearly": {"months": 12, "discount_percent": 25, "label": "12 months"},
+    "single_use": {"months": 1, "discount_percent": 0, "label": "Single Pass"},
 }
 
 PLAN_TERMS = tuple(TERMS.keys())
@@ -32,8 +33,11 @@ class Plan:
     cloud_minutes: int
     features: tuple[str, ...] = field(default_factory=tuple)
     recommended: bool = False
+    is_single_use: bool = False
 
     def price_for(self, term: str) -> int:
+        if self.is_single_use:
+            return self.monthly_price_kobo
         spec = TERMS.get(term)
         if spec is None:
             raise ValueError(f"Unknown term '{term}'.")
@@ -46,6 +50,8 @@ class Plan:
         return ((discounted + 5_000) // 10_000) * 100
 
     def months_for(self, term: str) -> int:
+        if self.is_single_use:
+            return 1
         spec = TERMS.get(term)
         if spec is None:
             raise ValueError(f"Unknown term '{term}'.")
@@ -112,6 +118,69 @@ PLANS: dict[str, Plan] = {
             "240 cloud GPU minutes each month",
             "Priority support and early features",
         ),
+    ),
+    # ── Single-use Buds passes (private /buds page only) ──────────────────────
+    "bud_spark": Plan(
+        id="bud_spark",
+        name="Spark Pass",
+        tagline="One hour of studio magic.",
+        monthly_price_kobo=1_000_000,  # NGN 10,000
+        daily_hours=1,
+        max_devices=1,
+        max_width=1280,
+        max_height=720,
+        max_fps=24,
+        cloud_minutes=10,
+        features=(
+            "1 hour total studio time (lifetime)",
+            "720p / 24 fps output",
+            "1 device",
+            "10 cloud GPU minutes",
+            "Real MeanVC2 & Beatrice v2 voice engines",
+        ),
+        is_single_use=True,
+    ),
+    "bud_glow": Plan(
+        id="bud_glow",
+        name="Glow Pass",
+        tagline="Two hours, the full experience.",
+        monthly_price_kobo=2_500_000,  # NGN 25,000
+        daily_hours=2,
+        max_devices=1,
+        max_width=1920,
+        max_height=1080,
+        max_fps=30,
+        cloud_minutes=10,
+        features=(
+            "2 hours total studio time (lifetime)",
+            "1080p / 30 fps output",
+            "1 device",
+            "10 cloud GPU minutes",
+            "Real MeanVC2 & Beatrice v2 voice engines",
+        ),
+        is_single_use=True,
+    ),
+    "bud_prime": Plan(
+        id="bud_prime",
+        name="Prime Pass",
+        tagline="Two hours, premium output quality.",
+        monthly_price_kobo=5_000_000,  # NGN 50,000
+        daily_hours=2,
+        max_devices=1,
+        max_width=1920,
+        max_height=1080,
+        max_fps=60,
+        cloud_minutes=10,
+        features=(
+            "2 hours total studio time (lifetime)",
+            "1080p / 60 fps output",
+            "1 device",
+            "10 cloud GPU minutes",
+            "Priority cloud processing",
+            "Real MeanVC2 & Beatrice v2 voice engines",
+        ),
+        recommended=True,
+        is_single_use=True,
     ),
 }
 

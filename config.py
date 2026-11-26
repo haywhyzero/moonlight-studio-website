@@ -53,7 +53,11 @@ class Settings:
 
     # Resend email receipt configuration (production only).
     resend_api_key: str = ""
-    resend_from_email: str = "Moonlight Studio <billing@moonlight.studio>"
+    resend_from_email: str = "Moonlight Studio <billing@moonlight.aerovyx.net>"
+
+    # Secret token that gates the private /buds pricing page.
+    # Share only with trusted buyers. If empty, the /buds route returns 404.
+    buds_access_token: str = ""
 
     # Used to sign entitlement tokens and to derive redemption codes. Change
     # this once, before the first paid order, and keep it stable.
@@ -152,6 +156,7 @@ class Settings:
             resend_from_email=_env(
                 "RESEND_FROM_EMAIL", "Moonlight Studio <billing@moonlight.studio>"
             ),
+            buds_access_token=_env("BUDS_ACCESS_TOKEN"),
             license_secret=_env("LICENSE_SECRET", DEFAULT_LICENSE_SECRET),
             code_pepper=_env("CODE_PEPPER"),
             activation_attempts_per_hour=_env_int(

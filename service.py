@@ -110,11 +110,13 @@ class LicenseService:
             connection.commit()
 
     # ------------------------------------------------------------------ plans
-    def plan_payloads(self) -> list[dict[str, Any]]:
+    def plan_payloads(self, include_single_use: bool = False) -> list[dict[str, Any]]:
         plans = []
         for plan in sorted(
             _plans(), key=lambda item: item.monthly_price_kobo
         ):
+            if plan.is_single_use and not include_single_use:
+                continue
             plans.append(
                 {
                     "id": plan.id,
@@ -129,6 +131,7 @@ class LicenseService:
                     "cloudMinutes": plan.cloud_minutes,
                     "features": list(plan.features),
                     "recommended": plan.recommended,
+                    "isSingleUse": plan.is_single_use,
                     "terms": {
                         term: {
                             "label": spec["label"],
@@ -141,6 +144,7 @@ class LicenseService:
                 }
             )
         return plans
+
 
     # ----------------------------------------------------------------- orders
     def create_order(
@@ -825,6 +829,21 @@ class LicenseService:
         plan: Plan,
         day: str,
     ) -> dict[str, Any]:
+        if plan.is_single_use:
+            # Lifetime total across every day — once exhausted, it's gone forever.
+            total_row = connection.execute(
+                "SELECT COALESCE(SUM(seconds), 0) AS total FROM usage_daily"
+                " WHERE code_id = ?",
+                (entitlement["code_id"],),
+            ).fetchone()
+            used = int(total_row["total"]) if total_row else 0
+            limit = plan.daily_hours * 3600
+            return {
+                "day": day,
+                "usedSeconds": used,
+                "limitSeconds": limit,
+                "remainingSeconds": max(0, limit - used),
+            }
         row = connection.execute(
             "SELECT seconds FROM usage_daily WHERE code_id = ? AND day = ?",
             (entitlement["code_id"], day),
@@ -837,6 +856,7 @@ class LicenseService:
             "limitSeconds": limit,
             "remainingSeconds": max(0, limit - used),
         }
+
 
     def _currency(self, provider: str) -> str:
         if provider == "paystack":

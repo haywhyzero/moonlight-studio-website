@@ -57,6 +57,12 @@ services:
       - key: RESEND_FROM_EMAIL
         value: Moonlight Studio <billing@moonlight.studio>
 
+      # Private /buds pricing page token (set in Render Dashboard, never commit to git)
+      # Generate: python -c "import secrets; print(secrets.token_urlsafe(32))"
+      # Access:   https://your-domain.com/buds?token=<this-value>
+      - key: BUDS_ACCESS_TOKEN
+        sync: false
+
       # Cryptographic secrets: auto-generate a secure random secret on Render
       - key: LICENSE_SECRET
         generateValue: true
